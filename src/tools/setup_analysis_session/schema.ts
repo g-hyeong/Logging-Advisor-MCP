@@ -1,29 +1,23 @@
 import { z } from 'zod';
 
-// 입력 스키마
+// 입력 스키마 - 코드 없이 가이드라인 중심
 export const SetupAnalysisSessionInputSchema = z.object({
-  code: z.string().describe('Code to analyze (required)'),
-  language: z.string().optional().describe('Programming language (optional, auto-detection available)'),
+  language: z.enum(['javascript', 'typescript', 'python', 'java', 'go', 'cpp', 'csharp', 'ruby']).optional().describe('Programming language'),
   environment: z.enum(['development', 'production']).default('production').describe('Target environment'),
   serviceCriticality: z.enum(['low', 'medium', 'high', 'critical']).default('high').describe('Service criticality level'),
-  targetScore: z.number().min(0).max(100).default(80).describe('Target quality score'),
-  maxChanges: z.number().min(1).max(20).default(5).describe('Maximum number of changes'),
-  focus: z.enum(['all', 'patterns', 'levels', 'errors', 'security']).default('all').describe('Analysis focus area')
+  focus: z.enum(['all', 'patterns', 'security', 'errors', 'performance']).default('all').describe('Analysis focus area')
 });
 
 export type SetupAnalysisSessionInput = z.infer<typeof SetupAnalysisSessionInputSchema>;
 
-// 출력 스키마
+// 출력 스키마 - 가이드라인과 워크플로우 안내 중심
 export const SetupAnalysisSessionOutputSchema = z.object({
   sessionId: z.string().describe('Session ID'),
   configuration: z.object({
-    code: z.string().describe('Code to be analyzed'),
-    language: z.string().describe('Detected language'),
+    language: z.string().optional().describe('Selected language'),
     environment: z.enum(['development', 'production']).describe('Analysis environment'),
     serviceCriticality: z.enum(['low', 'medium', 'high', 'critical']).describe('Service criticality'),
-    targetScore: z.number().describe('Target quality score'),
-    maxChanges: z.number().describe('Maximum changes allowed'),
-    focus: z.enum(['all', 'patterns', 'levels', 'errors', 'security']).describe('Analysis focus')
+    focus: z.enum(['all', 'patterns', 'security', 'errors', 'performance']).describe('Analysis focus')
   }).describe('Analysis configuration'),
   nextSteps: z.object({
     step1: z.object({
@@ -47,50 +41,33 @@ export const SetupAnalysisSessionOutputSchema = z.object({
 
 export type SetupAnalysisSessionOutput = z.infer<typeof SetupAnalysisSessionOutputSchema>;
 
-// MCP 입력 스키마 (JSON Schema 형식)
+// MCP 입력 스키마 (JSON Schema 형식) - 코드 없이 가이드라인 중심
 export const mcpInputSchema = {
   type: 'object',
   properties: {
-    code: {
-      type: 'string',
-      description: 'Code to analyze (required)'
-    },
     language: {
       type: 'string',
-      description: 'Programming language (optional, auto-detection available)'
+      enum: ['javascript', 'typescript', 'python', 'java', 'go', 'cpp', 'csharp', 'ruby'],
+      description: 'Programming language (optional, will provide general guidelines if not specified)'
     },
     environment: {
       type: 'string',
       enum: ['development', 'production'],
       default: 'production',
-      description: 'Target environment'
+      description: 'Target environment - production: strict standards, development: development convenience considered'
     },
     serviceCriticality: {
       type: 'string',
       enum: ['low', 'medium', 'high', 'critical'],
       default: 'high',
-      description: 'Service criticality level'
-    },
-    targetScore: {
-      type: 'number',
-      minimum: 0,
-      maximum: 100,
-      default: 80,
-      description: 'Target quality score (0-100)'
-    },
-    maxChanges: {
-      type: 'number',
-      minimum: 1,
-      maximum: 20,
-      default: 5,
-      description: 'Maximum number of changes (1-20)'
+      description: 'Service criticality - low: internal tools, medium: general services, high: core services, critical: financial/healthcare'
     },
     focus: {
       type: 'string',
-      enum: ['all', 'patterns', 'levels', 'errors', 'security'],
+      enum: ['all', 'patterns', 'security', 'errors', 'performance'],
       default: 'all',
-      description: 'Analysis focus area'
+      description: 'Analysis focus area - all: comprehensive analysis, patterns: logging patterns, security: security, errors: error handling, performance: performance impact'
     }
   },
-  required: ['code']
+  required: []
 } as const;

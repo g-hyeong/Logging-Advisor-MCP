@@ -8,46 +8,32 @@ export {
   type CodeChange
 } from '../../schemas/types.js';
 
-// MCP 스키마 정의
+// MCP 스키마 정의 - 개선 패턴 가이드라인 중심
 export const mcpInputSchema = {
   type: 'object' as const,
   properties: {
-    code: {
+    language: {
       type: 'string',
-      description: 'Original code - source code containing logging to be improved'
+      enum: ['javascript', 'typescript', 'python', 'java', 'go', 'cpp', 'csharp', 'ruby'],
+      description: 'Programming language - provides language-specific improvement patterns'
     },
-    analysis: {
-      type: 'object',
-      description: 'JSON analysis results from analyze_logging tool - includes score, issues, patterns, recommendations',
-      properties: {
-        score: { type: 'number', description: 'Current quality score' },
-        issues: { 
-          type: 'array', 
-          description: 'Array of discovered issues',
-          items: {
-            type: 'object',
-            properties: {
-              type: { type: 'string' },
-              severity: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
-              message: { type: 'string' },
-              line: { type: 'number' }
-            }
-          }
-        },
-        patterns: { type: 'object', description: 'Logging pattern analysis results' }
-      }
+    currentIssues: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Current logging issues identified (optional) - e.g., ["console.log overuse", "missing error context", "sensitive data exposure"]'
     },
-    targetScore: {
-      type: 'number',
-      minimum: 0,
-      maximum: 100,
-      description: 'Target quality score (0-100) - if not specified, automatically determines appropriate improvement level based on current score'
+    focus: {
+      type: 'string',
+      enum: ['all', 'patterns', 'security', 'errors', 'performance'],
+      default: 'all',
+      description: 'Improvement focus area'
     },
-    maxChanges: {
-      type: 'number',
-      minimum: 1,
-      description: 'Maximum number of changes - if not specified, automatically determined based on code size and issue severity (3-10 range)'
+    complexity: {
+      type: 'string',
+      enum: ['quick', 'standard', 'comprehensive'],
+      default: 'standard',
+      description: 'Improvement complexity - quick: 1-2 hours, standard: half day, comprehensive: full migration'
     }
   },
-  required: ['code']
+  required: ['language']
 };

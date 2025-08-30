@@ -4,63 +4,105 @@ import {
 } from './schema.js';
 
 
-// Improvement suggestion execution function
-export async function execute(_input: SuggestImprovementsInput): Promise<string> {
-  const prompt = `
-당신은 운영 중심의 로깅 개선 전문가입니다.
-분석 결과를 바탕으로 실제 적용 가능한 단계별 개선 로드맵을 제시하세요.
+// Generate language-specific improvement patterns
+function generateImprovementPatterns(language: string, currentIssues: string[] = [], focus: string = 'all', complexity: string = 'standard'): string {
+  const languagePatterns = {
+    javascript: {
+      antiPattern: 'console.log',
+      replacement: 'winston/pino logger',
+      example: `
+// Before
+console.log('User login:', userId);
 
-[ROI 중심 우선순위 전략]
-Quick Wins (1-2시간): Critical 이슈 즉시 해결 (ROI 극대)
-Short-term (1주일): High 이슈 구조적 개선 (ROI 높음)
-Long-term (1달): 아키텍처 개선 (ROI 중간)
+// After  
+logger.info('User login successful', { userId, timestamp: new Date() });`
+    },
+    python: {
+      antiPattern: 'print()',
+      replacement: 'logging module',
+      example: `
+# Before
+print(f'Processing user: {user_id}')
 
-[실무 적용 가이드]
-각 개선안마다 제공:
-- 정확한 라인별 수정 코드
-- 구현 난이도 (easy/medium/hard)
-- 예상 소요 시간
-- 비용 대비 효과 (ROI)
-- 필요한 의존성
-- 점진적 적용 방법
+# After
+logger.info('Processing user', extra={'user_id': user_id})`
+    },
+    java: {
+      antiPattern: 'System.out.println',
+      replacement: 'slf4j logger',
+      example: `
+// Before
+System.out.println("User: " + userId);
 
-[마이그레이션 전략]
-Big Bang 접근 피하기:
-1. 새 코드부터 적용
-2. Critical path 우선 수정
-3. 레거시는 점진적 개선
-4. 팀 리뷰와 함께 진행
+// After
+logger.info("User operation completed", userId);`
+    }
+  };
 
-[운영 안정성 고려사항]
-- 기존 로직 100% 보존
-- 성능 영향 최소화
-- 배포 위험 평가
-- 롤백 계획 포함
+  const lang = languagePatterns[language as keyof typeof languagePatterns] || languagePatterns.javascript;
+  const timeEstimate = complexity === 'quick' ? '1-2 hours' : complexity === 'comprehensive' ? '1-2 days' : 'half day';
+  
+  return `
+**${language.toUpperCase()} Logging Improvement Roadmap**
 
-[개선 패턴 템플릿]
-Debug-by-Print 제거:
-- console.log/print → structured logger
-- correlation ID 자동 주입
-- 환경별 레벨 자동 조정
+**Current Issues Identified:**
+${currentIssues.length ? currentIssues.map(issue => `- ${issue}`).join('\n') : '- General improvement needed'}
 
-Context 보강:
-- 에러 → 풀 스택 + 비즈니스 컨텍스트
-- 단순 메시지 → 검색가능 구조화 데이터
-- 격리된 로그 → 추적가능 연관 로그
+**Complexity Level: ${complexity}** (Estimated: ${timeEstimate})
 
-성능 최적화:
-- 동기 로깅 → 비동기 큐
-- 문자열 연결 → 지연 평가
-- 과도한 DEBUG → 환경별 필터링
+**Primary Improvement Pattern:**
+${lang.antiPattern} → ${lang.replacement}
 
-반드시 SuggestImprovementsOutput JSON 스키마로 응답하되:
-- changes: 라인별 구체적 코드와 ROI 정보
-- migrationPlan: 단계별 적용 계획  
-- riskAssessment: 배포 위험 평가
-- dependencies: 필요한 라이브러리/설정
+**Example Transformation:**
+\`\`\`${language}${lang.example}
+\`\`\`
+
+**Implementation Strategy:**
+1. **Setup Phase** (20% of time)
+   - Install logging library
+   - Create logger configuration
+   - Set up environment-specific levels
+
+2. **Migration Phase** (60% of time)
+   - Replace console/print statements
+   - Add structured context
+   - Implement error handling
+
+3. **Validation Phase** (20% of time)
+   - Test logging output
+   - Verify performance impact
+   - Update documentation
+
+**Focus Area: ${focus}**
+${focus === 'security' ? 
+  '- Remove sensitive data from logs\n- Implement data masking\n- Add audit trails' :
+  focus === 'performance' ? 
+  '- Implement async logging\n- Add log level filtering\n- Optimize hot paths' :
+  '- Comprehensive logging overhaul\n- Observability improvements\n- Production readiness'}
+
+**Common Improvements:**
+1. **Structured Logging**: JSON format with consistent fields
+2. **Context Preservation**: Request ID, user ID, operation context
+3. **Error Enhancement**: Full stack traces with business context
+4. **Performance**: Async logging to prevent blocking
+5. **Security**: Sensitive data filtering and masking
+
+**Next Steps:**
+1. Run 'validate_production_readiness' before deployment
+2. Test in staging environment first
+3. Monitor performance impact
+4. Roll back if issues occur
 `;
+}
 
-  return prompt;
+// Improvement suggestion execution function
+export async function execute(input: SuggestImprovementsInput): Promise<string> {
+  return generateImprovementPatterns(
+    input.language, 
+    input.currentIssues, 
+    input.focus, 
+    input.complexity
+  );
 }
 
 // MCP handler

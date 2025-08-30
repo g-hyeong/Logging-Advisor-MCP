@@ -5,7 +5,7 @@ import { handleRequest } from './handler.js';
 export const validateProductionReadinessTool = {
   name: 'validate_production_readiness',
   
-  description: `✅ Final logging safety validation before production deployment
+  description: `Final logging safety validation before production deployment
 
 **When used**:
 Automatically executed after suggest_improvements completion or when final pre-deployment inspection is needed
@@ -16,11 +16,11 @@ Automatically executed after suggest_improvements completion or when final pre-d
 - Focus on actual service failure possibilities
 
 **5-stage safety validation**:
-1️⃣ Security Gate: Complete sensitive data blocking (password, token, PII)
-2️⃣ Performance Gate: Prevent service performance blocking
-3️⃣ Observability Gate: Ensure incident response capability
-4️⃣ Operational Gate: Monitoring system integration
-5️⃣ Compliance Gate: Regulatory compliance (GDPR, audit)
+1  Security Gate: Complete sensitive data blocking (password, token, PII)
+2 Performance Gate: Prevent service performance blocking
+3 Observability Gate: Ensure incident response capability
+4 Operational Gate: Monitoring system integration
+5 Compliance Gate: Regulatory compliance (GDPR, audit)
 
 **Deployment decision**:
 - GO: Safe to deploy

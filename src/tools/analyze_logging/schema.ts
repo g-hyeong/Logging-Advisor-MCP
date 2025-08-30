@@ -6,29 +6,27 @@ export {
   type AnalyzeLoggingOutput
 } from '../../schemas/types.js';
 
-// MCP 스키마 정의 (JSON Schema 형태)
+// MCP 스키마 정의 (JSON Schema 형태) - 가이드라인 제시 중심
 export const mcpInputSchema = {
   type: 'object' as const,
   properties: {
-    code: {
-      type: 'string',
-      description: 'Code to analyze (text) - source code containing logging statements'
-    },
     language: {
       type: 'string',
-      description: 'Programming language (e.g., javascript, python, java, go)'
-    },
-    focus: {
-      type: 'string',
-      enum: ['all', 'patterns', 'levels', 'errors', 'security'],
-      description: 'Analysis focus - if not specified, automatically determined based on code content. all: comprehensive analysis, patterns: logging patterns, levels: log levels, errors: error handling, security: security'
+      enum: ['javascript', 'typescript', 'python', 'java', 'go', 'cpp', 'csharp', 'ruby'],
+      description: 'Programming language - provides language-specific analysis guidelines'
     },
     environment: {
       type: 'string',
       enum: ['development', 'production'],
       default: 'production',
       description: 'Target environment - production: strict standards, development: development convenience considered'
+    },
+    focus: {
+      type: 'string',
+      enum: ['all', 'patterns', 'security', 'errors', 'performance'],
+      default: 'all',
+      description: 'Analysis focus - all: comprehensive analysis, patterns: logging patterns, security: sensitive data exposure, errors: error handling, performance: performance impact'
     }
   },
-  required: ['code']
+  required: ['language']
 };

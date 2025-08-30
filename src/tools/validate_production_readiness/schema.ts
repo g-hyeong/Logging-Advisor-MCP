@@ -6,13 +6,14 @@ export {
   type ValidateProductionReadinessOutput
 } from '../../schemas/types.js';
 
-// MCP 스키마 정의
+// MCP 스키마 정의 - 배포 안전성 체크리스트 중심
 export const mcpInputSchema = {
   type: 'object' as const,
   properties: {
-    code: {
+    language: {
       type: 'string',
-      description: 'Code to validate - source code containing logging scheduled for deployment'
+      enum: ['javascript', 'typescript', 'python', 'java', 'go', 'cpp', 'csharp', 'ruby'],
+      description: 'Programming language - provides language-specific validation checklist'
     },
     environment: {
       type: 'string',
@@ -26,14 +27,11 @@ export const mcpInputSchema = {
       default: 'high',
       description: 'Service criticality - low: internal tools, medium: general services, high: core services, critical: financial/healthcare'
     },
-    previousAnalysis: {
-      type: 'object',
-      description: 'Previous analysis results from analyze_logging or suggest_improvements (if available, used for reference)',
-      properties: {
-        score: { type: 'number', description: 'Previous quality score' },
-        issues: { type: 'array', description: 'Known issues' }
-      }
+    knownIssues: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Known issues from previous analysis (optional) - helps focus validation on specific areas'
     }
   },
-  required: ['code']
+  required: ['language']
 };
