@@ -1,0 +1,44 @@
+{
+  "name": "@g-hyeong/logging-advisor-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for intelligent logging quality analysis and improvement suggestions",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "logging-advisor-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx --watch src/index.ts",
+    "start": "node dist/index.js",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["mcp", "logging", "advisor", "typescript", "claude", "ai", "code-quality"],
+  "author": "g-hyeong",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/g-hyeong/logging-advisor-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/g-hyeong/logging-advisor-mcp/issues"
+  },
+  "homepage": "https://github.com/g-hyeong/logging-advisor-mcp#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.4",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "tsx": "^4.0.0",
+    "typescript": "^5.3.3"
+  }
+}
