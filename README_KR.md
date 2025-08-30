@@ -22,55 +22,17 @@ npm install -g @g-hyeong/logging-advisor-mcp
 {
   "mcpServers": {
     "logging-advisor": {
-      "command": "logging-advisor-mcp"
+      "command": "npx",
+      "args": ["@g-hyeong/logging-advisor-mcp"],
+      "env": {}
     }
   }
 }
 ```
 
-### Cursor IDE
-`.cursorrules` 또는 워크스페이스 설정에 추가:
-```json
-{
-  "mcp": {
-    "servers": {
-      "logging-advisor": {
-        "command": "logging-advisor-mcp"
-      }
-    }
-  }
-}
-```
-
-### Claude Code (VS Code 확장)
-VS Code 설정 또는 `.vscode/settings.json`에 구성:
-```json
-{
-  "claude.mcpServers": {
-    "logging-advisor": {
-      "command": "logging-advisor-mcp"
-    }
-  }
-}
-```
-
-### Gemini CLI
-MCP 지원과 함께 사용:
+### Claude Code
 ```bash
-gemini-cli --mcp-server logging-advisor-mcp
-```
-
-### 기타 MCP 클라이언트
-MCP 호환 클라이언트의 경우:
-```json
-{
-  "mcpServers": {
-    "logging-advisor": {
-      "command": "node",
-      "args": ["/path/to/logging-advisor-mcp/dist/index.js"]
-    }
-  }
-}
+claude mcp add logging-advisor -- npx -y logging-advisor-mcp
 ```
 
 설정 후 MCP 클라이언트를 재시작하세요. 로깅 어드바이저 도구를 사용할 수 있습니다.

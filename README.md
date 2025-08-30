@@ -22,56 +22,19 @@ Add to your configuration file:
 {
   "mcpServers": {
     "logging-advisor": {
-      "command": "logging-advisor-mcp"
+      "command": "npx",
+      "args": ["@g-hyeong/logging-advisor-mcp"],
+      "env": {}
     }
   }
 }
 ```
 
-### Cursor IDE
-Add to `.cursorrules` or workspace settings:
-```json
-{
-  "mcp": {
-    "servers": {
-      "logging-advisor": {
-        "command": "logging-advisor-mcp"
-      }
-    }
-  }
-}
-```
-
-### Claude Code (VS Code Extension)
-Configure in VS Code settings or `.vscode/settings.json`:
-```json
-{
-  "claude.mcpServers": {
-    "logging-advisor": {
-      "command": "logging-advisor-mcp"
-    }
-  }
-}
-```
-
-### Gemini CLI
-Use with MCP support:
+### Claude Code
 ```bash
-gemini-cli --mcp-server logging-advisor-mcp
+claude mcp add logging-advisor -- npx -y logging-advisor-mcp
 ```
 
-### Other MCP Clients
-For any MCP-compatible client:
-```json
-{
-  "mcpServers": {
-    "logging-advisor": {
-      "command": "node",
-      "args": ["/path/to/logging-advisor-mcp/dist/index.js"]
-    }
-  }
-}
-```
 
 After configuration, restart your MCP client. The logging advisor tools will be available.
 
