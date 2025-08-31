@@ -7,7 +7,7 @@ An intelligent MCP (Model Context Protocol) server that analyzes logging quality
 ## Installation
 
 ```bash
-npm install -g @g-hyeong/logging-advisor-mcp
+npm install -g logging-advisor-mcp
 ```
 
 ## MCP Client Setup
@@ -23,7 +23,7 @@ Add to your configuration file:
   "mcpServers": {
     "logging-advisor": {
       "command": "npx",
-      "args": ["@g-hyeong/logging-advisor-mcp"],
+      "args": ["logging-advisor-mcp"],
       "env": {}
     }
   }

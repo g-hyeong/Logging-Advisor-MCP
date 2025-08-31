@@ -7,7 +7,7 @@
 ## 설치
 
 ```bash
-npm install -g @g-hyeong/logging-advisor-mcp
+npm install -g logging-advisor-mcp
 ```
 
 ## MCP 클라이언트 설정
@@ -23,7 +23,7 @@ npm install -g @g-hyeong/logging-advisor-mcp
   "mcpServers": {
     "logging-advisor": {
       "command": "npx",
-      "args": ["@g-hyeong/logging-advisor-mcp"],
+      "args": ["logging-advisor-mcp"],
       "env": {}
     }
   }
